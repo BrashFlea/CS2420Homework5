@@ -81,7 +81,7 @@ DoublyLinkedList<T, U>::DoublyLinkedList(const DoublyLinkedList<T,U>& other){
         Node<T,U> *temp = new Node<T,U>();
         temp->key = current->key;
         temp->info = current->info;
-        temp->backward == previous;
+        temp->backward = previous;
         previous->forward = temp;
         temp->forward = NULL;
         previous = current;
@@ -119,39 +119,106 @@ int DoublyLinkedList<T,U>::getCount() const {
     return count;
 }
 //Done
+
 //Add/insert an node onto the end of the list.
 template <typename T, typename U>
 void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
-  
-	//TODO: Complete this:
-}
+	Node<T, U> *tmp = this->last;
+	Node<T, U> newNode = new Node;
+	//Generate node
+	newNode->key = key;
+	newNode->info = value;
+	//Assign pointers
+	tmp->forward = newNode;
+	newNode->forward = NULL;
+	newNode->backward = tmp;
+	this->last = newNode;
 
+}
 //Done
+
+
+//Search for a key within the list and return true/false if found
 template <typename T, typename U>
 bool DoublyLinkedList<T, U>::nodeWithKeyExists(const T& key) const {
-    //TODO: Complete this:
+	//Start at the beginning
+	Node<T, U> *tmp = this->first;
+
+	//Traverse each node looking for the key
+	//Stop if NULL
+	while (tmp) {
+		if (key = tmp->key) {
+			return true;
+		}
+		else {
+			tmp = tmp->forward;
+		}
+	}
     
     return false;
 
 }
-
-
 //Done
+
+//Search for a key within the list 
+//Return a reference to the info if found
+//Throw an error if not found
 template <typename T, typename U>
 U& DoublyLinkedList<T, U>::searchForKey(const T& key) {
-    //TODO: Complete this
+	//Start at the beginning
+	Node<T, U> *tmp = this->first;
+
+	//Traverse each node looking for the key
+	//Stop if NULL
+	while (tmp) {
+		if (key = tmp->key) {
+			return &tmp->info;
+		}
+		else {
+			tmp = tmp->forward;
+		}
+	}
     
     //throw an error if there's nothing to delete
     throw Error();
 }
-
-
 //Done
+
 template <typename T, typename U>
 void DoublyLinkedList<T, U>::deleteNodeWithKey(const T& key) {
-    //TODO: Complete this:
-    
+	//Start at the beginning
+	Node<T, U> *tmp = this->first;
+	Node<T, U> *trail = NULL;
+	Node<T, U> *next = NULL;
+	
+	//Traverse each node looking for the key
+	//Stop if NULL
+	while (tmp) {
+		if (key = tmp->key) {
+			trail = tmp->backward;
+			next = tmp->forward;
+			break;
+		}
+		else {
+			tmp = tmp->forward;
+		}
+	}
+
+	if (key = tmp->key) {
+		//Set pointers and delete the node
+		trail->forward = next;
+		next->backward = trail;
+		tmp->forward = NULL;
+		tmp->backward = NULL;
+		delete tmp;
+	}
+	else {
+		//throw an error if there's nothing to delete
+		throw Error();
+	}
+	 
 }
+//Done
 
 #endif
 
