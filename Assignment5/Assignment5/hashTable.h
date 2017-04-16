@@ -12,11 +12,9 @@ using std::string;
 unsigned int hashFunctionInt(const void *void_key) {
     //Get that parameter back into an int pointer.  
     unsigned int *temp = static_cast<unsigned int *>(const_cast<void *>(void_key));
-    unsigned int key = *temp;
-    //TODO: Complete this.  You need to hash the int variable key and return a value between 0 and 999.
+	unsigned int key = *temp;
 
-
-    return 0;
+    return key % 1000;
 
 
 }
@@ -24,11 +22,14 @@ unsigned int hashFunctionInt(const void *void_key) {
 unsigned int hashFunctionString(const void *void_key) {
     string *temp = static_cast<string *>(const_cast<void *>(void_key));
     string key = *temp;
-    //TODO: Complete this.  You need to hash the int variable key and return a value between 0 and 999.
-    
-    //Hint, don't return a negative value!
+	unsigned int hash = 0;
+	int index = 1;
+	for (string::iterator it = key.begin(); it != key.end(); it++) {
+		hash += static_cast<unsigned int>(*it) * std::pow(10, index % 3);
+	}
+	hash %= 1000;
 
-    return 0;
+    return hash;
     
 }
 
@@ -72,10 +73,7 @@ template <typename T, typename U>
 hashTable<T,U>::hashTable(unsigned int (* hashFunction)(const void*)) {
 
     this->hashFunction = hashFunction;
-    //TODO: Initialize an array of 1000 linked lists using the 
-    //new keyword, storing the array starting address in the 
-    //pointer linkedListArray
-    linkedListArray = NULL;
+    linkedListArray = new DoublyLinkedList<T, U>[1000];
 
 }
 
@@ -120,51 +118,35 @@ hashTable<T,U>::~hashTable() {
 
 template <typename T, typename U>
 void hashTable<T, U>::add(const T& key, const U& value)  {
-    //TODO: 
-    //hash the key hash(key)
-    //Get the returned index
-    //use that index in your array of linked lists
+
+	int index = hash(key);
+	linkedListArray[index].insertLast(key, value);
   
 }
 
 
 template <typename T, typename U>
 bool hashTable<T, U>::exists(const T& key) const {
-    //TODO: 
-    //hash the key hash(key)
-    //Get the returned index
-    //use that index in your array of linked lists
-    
-    return false;
+
+	int index = hash(key);
+    return linkedListArray[index].nodeWithKeyExists(key);
 
 }
 
 
 template <typename T, typename U>
 U hashTable<T, U>::item(const T& key) {
-    //TODO: 
-    //hash the key hash(key)
-    //Get the returned index
-    //use that index in your array of linked lists
-    
-    //to get it to compile
-    U temp;
-    return temp;
+
+	int index = hash(key);
+    return linkedListArray[index].searchForKey(key);
 }
 
 
 template <typename T, typename U>
 U& hashTable<T, U>::operator[](const T& key) {
-    //TODO: 
-    //hash the key hash(key)
-    //Get the returned index
-    //use that index in your array of linked lists
 
-
-    //These two lines are to just get it to compile, you don't want them.
-    //(this is also causing the memory leak test to fail)
-    U* temp = new U;
-    return *temp;
+	int index = hash(key);
+	return linkedListArray[index].searchForKey(key);
 
 }
 
@@ -172,10 +154,9 @@ U& hashTable<T, U>::operator[](const T& key) {
 
 template <typename T, typename U>
 void hashTable<T, U>::remove(const T& key) {
-    //TODO:
-    //hash the key hash(key)
-    //Get the returned index
-    //use that index in your array of linked lists
+
+	int index = hash(key);
+	return linkedListArray[index].deleteNodeWithKey(key);
     
 }
 

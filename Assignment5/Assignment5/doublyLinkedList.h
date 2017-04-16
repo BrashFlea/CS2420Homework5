@@ -123,16 +123,23 @@ int DoublyLinkedList<T,U>::getCount() const {
 //Add/insert an node onto the end of the list.
 template <typename T, typename U>
 void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
-	Node<T, U> *tmp = this->last;
-	Node<T, U> newNode = new Node;
+	Node<T, U> * tmp = NULL;
+	tmp = new Node<T, U>;
 	//Generate node
-	newNode->key = key;
-	newNode->info = value;
+	tmp->key = key;
+	tmp->info = value;
 	//Assign pointers
-	tmp->forward = newNode;
-	newNode->forward = NULL;
-	newNode->backward = tmp;
-	this->last = newNode;
+	if (last != NULL) {
+		last->forward = tmp;
+		last->backward = last;
+		last = tmp;
+		count++;
+	}
+
+	if (first == NULL){
+		first = tmp;
+		count++;
+	}
 
 }
 //Done
@@ -142,12 +149,12 @@ void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
 template <typename T, typename U>
 bool DoublyLinkedList<T, U>::nodeWithKeyExists(const T& key) const {
 	//Start at the beginning
-	Node<T, U> *tmp = this->first;
+	Node<T, U> *tmp = first;
 
 	//Traverse each node looking for the key
 	//Stop if NULL
 	while (tmp) {
-		if (key = tmp->key) {
+		if (tmp->key == key) {
 			return true;
 		}
 		else {
@@ -171,8 +178,8 @@ U& DoublyLinkedList<T, U>::searchForKey(const T& key) {
 	//Traverse each node looking for the key
 	//Stop if NULL
 	while (tmp) {
-		if (key = tmp->key) {
-			return &tmp->info;
+		if (key == tmp->key) {
+			return tmp->info;
 		}
 		else {
 			tmp = tmp->forward;
@@ -187,37 +194,36 @@ U& DoublyLinkedList<T, U>::searchForKey(const T& key) {
 template <typename T, typename U>
 void DoublyLinkedList<T, U>::deleteNodeWithKey(const T& key) {
 	//Start at the beginning
-	Node<T, U> *tmp = this->first;
-	Node<T, U> *trail = NULL;
-	Node<T, U> *next = NULL;
-	
+	Node<T, U> *tmp = first;
+
 	//Traverse each node looking for the key
 	//Stop if NULL
-	while (tmp) {
-		if (key = tmp->key) {
-			trail = tmp->backward;
-			next = tmp->forward;
-			break;
-		}
-		else {
-			tmp = tmp->forward;
-		}
-	}
+	while (tmp != NULL) {
+		if (tmp->key == key) {
+			if (tmp->backward != NULL) {
+				tmp->backward->forward = tmp->forward;
+			}
+			else {
+				first = tmp->forward;
+			}
+			if (tmp->forward != NULL) {
+				tmp->forward->backward = tmp->backward;
 
-	if (key = tmp->key) {
-		//Set pointers and delete the node
-		trail->forward = next;
-		next->backward = trail;
-		tmp->forward = NULL;
-		tmp->backward = NULL;
-		delete tmp;
+			}
+			else {
+				last = tmp->backward;
+			}
+			delete tmp;
+			tmp = NULL;
+			count--;
+			break;
+
+		}
+		tmp = tmp->forward;
 	}
-	else {
-		//throw an error if there's nothing to delete
-		throw Error();
-	}
-	 
 }
+
+
 //Done
 
 #endif
