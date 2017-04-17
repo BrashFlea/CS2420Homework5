@@ -20,17 +20,29 @@ unsigned int hashFunctionInt(const void *void_key) {
 }
 
 unsigned int hashFunctionString(const void *void_key) {
+	//Credit to Cassie for help with hashFunctionString;
     string *temp = static_cast<string *>(const_cast<void *>(void_key));
     string key = *temp;
 	unsigned int hash = 0;
+	unsigned int number = 0;
 	int index = 1;
-	for (string::iterator it = key.begin(); it != key.end(); it++) {
-		hash += static_cast<unsigned int>(*it) * 10; //std::pow(10, index % 3);
-	}
-	hash %= 1000;
 
-    return hash;
-    
+	if (key.find("-", 0) != -1) {
+		int pos = key.find("-", 0);
+		key.erase(pos, 1);
+		number = std::stoull(key, nullptr, 10) % 1000;
+		return number;
+	}
+	else {
+		for (string::iterator it = key.begin(); it != key.end(); it++) {
+			if (isalpha(*it)) {
+				number *= 10;
+				number += *it + '0';
+			}
+		}
+		number %= 1000;
+		return number;
+	}
 }
 
 
