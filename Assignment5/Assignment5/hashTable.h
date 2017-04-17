@@ -23,9 +23,7 @@ unsigned int hashFunctionString(const void *void_key) {
 	//Credit to Cassie for help with hashFunctionString;
     string *temp = static_cast<string *>(const_cast<void *>(void_key));
     string key = *temp;
-	unsigned int hash = 0;
 	unsigned int number = 0;
-	int index = 1;
 
 	if (key.find("-", 0) != -1) {
 		int pos = key.find("-", 0);
