@@ -25,7 +25,7 @@ unsigned int hashFunctionString(const void *void_key) {
 	unsigned int hash = 0;
 	int index = 1;
 	for (string::iterator it = key.begin(); it != key.end(); it++) {
-		hash += static_cast<unsigned int>(*it) * std::pow(10, index % 3);
+		hash += static_cast<unsigned int>(*it) * 10; //std::pow(10, index % 3);
 	}
 	hash %= 1000;
 

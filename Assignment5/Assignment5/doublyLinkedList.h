@@ -132,7 +132,7 @@ void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
 	//Elements exist in list
 	if (last != NULL) {
 		last->forward = tmp;
-		last->backward = last;
+		tmp->backward = last;
 		last = tmp;
 		count++;
 	}
@@ -140,6 +140,8 @@ void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
 	if (first == NULL){
 		first = tmp;
 		last = tmp;
+		tmp->forward = NULL;
+		tmp->backward = NULL;
 		count++;
 	}
 
