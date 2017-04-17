@@ -129,15 +129,17 @@ void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
 	tmp->key = key;
 	tmp->info = value;
 	//Assign pointers
+	//Elements exist in list
 	if (last != NULL) {
 		last->forward = tmp;
 		last->backward = last;
 		last = tmp;
 		count++;
 	}
-
+	//Empty list
 	if (first == NULL){
 		first = tmp;
+		last = tmp;
 		count++;
 	}
 
