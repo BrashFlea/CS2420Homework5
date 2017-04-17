@@ -1,6 +1,9 @@
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
 
+/*For linux compile with g++ -std=c++11*/
+#include <stddef.h> // For NULL on Linux
+
 //--------------------------------------------
 //The Node class
 //--------------------------------------------
@@ -126,6 +129,8 @@ void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
 	Node<T, U> * tmp = NULL;
 	tmp = new Node<T, U>;
 	//Generate node
+	tmp->forward = NULL;
+	tmp->backward = NULL;
 	tmp->key = key;
 	tmp->info = value;
 	//Assign pointers
@@ -140,8 +145,6 @@ void DoublyLinkedList<T,U>::insertLast(const T& key, const U& value) {
 	if (first == NULL){
 		first = tmp;
 		last = tmp;
-		tmp->forward = NULL;
-		tmp->backward = NULL;
 		count++;
 	}
 

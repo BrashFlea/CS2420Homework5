@@ -1,7 +1,10 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
+/*For linux compile with g++ -std=c++11*/
+
 #include <string>
+#include <stddef.h> // For NULL on Linux
 #include "doublyLinkedList.h"
 
 using std::string;
